@@ -1,5 +1,5 @@
 {
-  "name": "dashgo",
+  "name": "template-dashboard-chackra-nextjs",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,12 +9,34 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@chakra-ui/core": "^0.8.0",
+    "@chakra-ui/react": "^2.2.1",
+    "@emotion/react": "^11.9.3",
+    "@emotion/styled": "^11.9.3",
+    "@faker-js/faker": "^7.3.0",
+    "@hookform/resolvers": "^2.9.5",
+    "@next-auth/prisma-adapter": "^1.0.3",
+    "apexcharts": "^3.35.3",
+    "axios": "^0.27.2",
+    "framer-motion": "^6.4.3",
+    "jwt-decode": "^3.1.2",
     "next": "12.2.1",
+    "next-auth": "^4.10.0",
+    "nookies": "^2.5.2",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-apexcharts": "^1.4.0",
+    "react-dom": "18.2.0",
+    "react-hook-form": "^7.33.1",
+    "react-icons": "^4.4.0",
+    "react-query": "^3.39.1",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@types/node": "^18.0.3",
+    "@types/react": "^18.0.15",
     "eslint": "8.19.0",
-    "eslint-config-next": "12.2.1"
+    "eslint-config-next": "12.2.1",
+    "miragejs": "^0.1.45",
+    "typescript": "^4.7.4"
   }
 }
