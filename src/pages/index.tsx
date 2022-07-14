@@ -3,8 +3,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 
-import prisma from "../lib/prisma";
-
 import { Input } from "../components/form/Input";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -20,10 +18,8 @@ const signInFormSchema = yup.object().shape({
   password: yup.string().required("Senha é obrigatória"),
 });
 
-export default function SignIn({ users }) {
+export default function SignIn() {
   const { signIn } = useAuth();
-
-  console.log(users);
 
   const { register, handleSubmit, formState } = useForm({
     resolver: yupResolver(signInFormSchema),
@@ -76,11 +72,7 @@ export default function SignIn({ users }) {
 }
 
 export const getServerSideProps = withSRRGuest(async (ctx) => {
-  const users = await prisma.users.findMany({});
-
-  console.log(users);
-
   return {
-    props: { users },
+    props: {},
   };
 });
