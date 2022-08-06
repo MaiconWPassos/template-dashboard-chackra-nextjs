@@ -1,13 +1,9 @@
 import dynamic from "next/dynamic";
 
-import { Box, Flex, SimpleGrid, Text, theme } from "@chakra-ui/react";
+import { Box, SimpleGrid, Text, theme } from "@chakra-ui/react";
 import { ApexOptions } from "apexcharts";
-import { Header } from "../components/Header";
-import { Sidebar } from "../components/Sidebar";
-import { useAuth } from "../contexts/AuthContext";
 import { withSSRAuth } from "../utils/withSSRAuth";
-import { setupApiClient } from "../services/api";
-import { useCan } from "../hooks/useCan";
+
 import { Layout } from "../components/Layout";
 
 const Chart = dynamic(() => import("react-apexcharts"), {
@@ -71,11 +67,6 @@ const series = [
 ];
 
 export default function Dashboard() {
-  const { user } = useAuth();
-
-  const useCanSeeMetrics = useCan({
-    permissions: ["metrics.list"],
-  });
   return (
     <Layout>
       <SimpleGrid
@@ -84,14 +75,28 @@ export default function Dashboard() {
         minChildWidth="320px"
         alignItems="flex-start"
       >
-        <Box p={["6", "8"]} bg="gray.800" borderRadius={8}>
+        <Box
+          p={["6", "8"]}
+          bg="gray.800"
+          borderRadius={8}
+          _light={{
+            bg: "white",
+          }}
+        >
           <Text fontSize="lg" mb="4">
             Inscritos da semana
           </Text>
           <Chart type="area" height={160} options={options} series={series} />
         </Box>
 
-        <Box p="8" bg="gray.800" borderRadius={8}>
+        <Box
+          p="8"
+          bg="gray.800"
+          borderRadius={8}
+          _light={{
+            bg: "white",
+          }}
+        >
           <Text fontSize="lg" mb="4">
             Taxa de abertura
           </Text>
@@ -103,9 +108,6 @@ export default function Dashboard() {
 }
 
 export const getServerSideProps = withSSRAuth(async (ctx) => {
-  const apiClient = setupApiClient(ctx);
-
-  const response = await apiClient.get("/me");
   return {
     props: {},
   };

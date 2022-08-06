@@ -9,7 +9,7 @@ import { makeServer } from "../services/mirage";
 import { queryClient } from "../services/queryClient";
 import { theme } from "../styles/theme";
 
-if (process.env.NODE_ENV === "development") {
+if (process.env.NEXT_PUBLIC_NODE_ENV === "development") {
   makeServer();
 }
 

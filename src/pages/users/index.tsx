@@ -25,7 +25,7 @@ import { Layout } from "../../components/Layout";
 import Pagination from "../../components/Pagination";
 import { api } from "../../services/apiClient";
 
-import { getUsers, useUsers } from "../../services/hooks/useUsers";
+import { User, useUsers } from "../../services/hooks/useUsers";
 import { queryClient } from "../../services/queryClient";
 import { withSSRAuth } from "../../utils/withSSRAuth";
 
@@ -56,7 +56,16 @@ export default function UserList({ users }) {
 
   return (
     <Layout>
-      <Box flex="1" borderRadius={8} bg="gray.800" p="8">
+      <Box
+        flex="1"
+        borderRadius={8}
+        bg="gray.800"
+        p="8"
+        _light={{
+          bg: "white",
+          shadow: "lg",
+        }}
+      >
         <Flex mb="8" justify="space-between" align="center">
           <Heading size="lg" fontWeight="normal">
             Usuários
@@ -70,7 +79,7 @@ export default function UserList({ users }) {
               as="a"
               size="sm"
               fontSize="sm"
-              colorScheme="teal"
+              colorScheme="blue"
               leftIcon={<Icon as={RiAddLine} fontSize="20" />}
             >
               Criar novo
@@ -88,12 +97,9 @@ export default function UserList({ users }) {
           </Flex>
         ) : (
           <>
-            <Table colorScheme="whiteAlpha" overflowX="auto">
+            <Table colorScheme="whiredpha" overflowX="auto">
               <Thead>
                 <Tr>
-                  <Th px={["4", "4", "6"]} color="gray.300" w="8">
-                    <Checkbox colorScheme="teal" />
-                  </Th>
                   <Th>Usuário</Th>
 
                   {isWideVersion && <Th>Data de Cadastro</Th>}
@@ -101,26 +107,23 @@ export default function UserList({ users }) {
                 </Tr>
               </Thead>
               <Tbody>
-                {data.users.map((user) => {
+                {data.users.map((user: User) => {
                   return (
                     <Tr key={user.id}>
-                      <Td px={["4", "4", "6"]}>
-                        <Checkbox colorScheme="teal" />
-                      </Td>
                       <Td>
                         <Box>
                           <Link
-                            color="purple.400"
+                            color="blue.400"
                             onMouseEnter={() => handlePrefetchUser(user.id)}
                           >
-                            <Text fontWeight="bold">{user.name}</Text>
+                            <Text fontWeight="bold">{user.username}</Text>
                           </Link>
                           <Text fontSize="small" color="gray.300">
                             {user.email}
                           </Text>
                         </Box>
                       </Td>
-                      {isWideVersion && <Td>{user.createdAt}</Td>}
+                      {isWideVersion && <Td>{user.created_at}</Td>}
 
                       <Td>
                         {isWideVersion ? (
@@ -128,15 +131,16 @@ export default function UserList({ users }) {
                             as="a"
                             size="sm"
                             fontSize="sm"
-                            colorScheme="purple"
+                            colorScheme="blue"
                             leftIcon={<Icon as={RiPencilLine} fontSize="16" />}
+                            href={`/users/editar/${user.id}`}
                           >
                             Editar
                           </Button>
                         ) : (
                           <IconButton
                             aria-label="Editar"
-                            colorScheme="purple"
+                            colorScheme="blue"
                             icon={<Icon as={RiPencilLine} />}
                           />
                         )}
@@ -158,9 +162,14 @@ export default function UserList({ users }) {
   );
 }
 
-export const getServerSideProps = withSSRAuth(async () => {
-  const { users } = await getUsers(1);
-  return {
-    props: { users },
-  };
-});
+export const getServerSideProps = withSSRAuth(
+  async () => {
+    return {
+      props: {},
+    };
+  },
+  {
+    permissions: ["user.list"],
+    roles: [],
+  }
+);

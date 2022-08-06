@@ -8,15 +8,18 @@ import {
 } from "react";
 import { setCookie, parseCookies, destroyCookie } from "nookies";
 import { api } from "../services/apiClient";
+import { Entity } from "../models/Entity";
 
 type User = {
-  email: string;
+  id: string;
+  username: string;
+  entity: Entity;
   permissions: string[];
   roles: string[];
 };
 
 type SignInCredentials = {
-  email: string;
+  username: string;
   password: string;
 };
 
@@ -36,8 +39,8 @@ const AuthContext = createContext({} as AuthContextData);
 let authChannel: BroadcastChannel;
 
 export function signOut(ctx = undefined) {
-  destroyCookie(ctx, process.env.SECRET_TOKEN_SESSION_KEY);
-  destroyCookie(ctx, process.env.SECRET_REFRESH_TOKEN_SESSION_KEY);
+  destroyCookie(ctx, process.env.NEXT_PUBLIC_SECRET_TOKEN_SESSION_KEY);
+  destroyCookie(ctx, process.env.NEXT_PUBLIC_SECRET_REFRESH_TOKEN_SESSION_KEY);
 
   authChannel.postMessage("signOut");
 
@@ -56,9 +59,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
           signOut();
           break;
 
-        case "signOut":
-          signOut();
-          break;
         default:
           break;
       }
@@ -66,16 +66,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, []);
 
   useEffect(() => {
-    const { [`${process.env.SECRET_TOKEN_SESSION_KEY}`]: token } =
+    const { [`${process.env.NEXT_PUBLIC_SECRET_TOKEN_SESSION_KEY}`]: token } =
       parseCookies();
 
     if (token) {
       api
         .get("/me")
         .then((response) => {
-          const { email, permissions, roles } = response.data;
+          const { permissions, roles, user } = response.data;
 
-          setUser({ email, permissions, roles });
+          setUser({ permissions, roles, ...user });
         })
         .catch(() => {
           signOut();
@@ -83,24 +83,29 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }, []);
 
-  async function signIn({ email, password }: SignInCredentials) {
+  async function signIn({ username, password }: SignInCredentials) {
     try {
-      const response = await api.post("sessions", {
-        email,
+      const response = await api.post("login", {
+        username,
         password,
       });
 
-      const { permissions, roles, token, refreshToken } = response.data;
-
-      setCookie(undefined, process.env.SECRET_TOKEN_SESSION_KEY, token, {
-        maxAge: 60 * 60 * 24 * 30, //30 day
-        path: "/",
-      });
+      const { permissions, roles, token, refreshToken, user } = response.data;
 
       setCookie(
         undefined,
-        process.env.SECRET_REFRESH_TOKEN_SESSION_KEY,
-        refreshToken,
+        process.env.NEXT_PUBLIC_SECRET_TOKEN_SESSION_KEY,
+        token,
+        {
+          maxAge: 60 * 60 * 24 * 30, //30 day
+          path: "/",
+        }
+      );
+
+      setCookie(
+        undefined,
+        process.env.NEXT_PUBLIC_SECRET_REFRESH_TOKEN_SESSION_KEY,
+        refreshToken.id,
         {
           maxAge: 60 * 60 * 24 * 30, //30 day
           path: "/",
@@ -108,9 +113,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       );
 
       setUser({
-        email,
         permissions,
         roles,
+        ...user,
       });
 
       api.defaults.headers["Authorization"] = "Bearer " + token;

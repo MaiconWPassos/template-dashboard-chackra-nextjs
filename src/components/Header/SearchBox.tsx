@@ -14,6 +14,10 @@ export function SearchBox() {
       color="gray.200"
       position="relative"
       bg="gray.800"
+      _light={{
+        bg: "white",
+        color: "gray.800",
+      }}
       borderRadius="full"
     >
       <Input

@@ -8,8 +8,8 @@ export function Logo() {
       letterSpacing="title"
       w="64"
     >
-      Logo
-      <Text as="span" color="teal.500" ml="1">
+      MWPSoftware
+      <Text as="span" color="blue.500" ml="1">
         .
       </Text>
     </Text>

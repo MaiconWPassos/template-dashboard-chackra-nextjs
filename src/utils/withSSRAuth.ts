@@ -22,9 +22,9 @@ export function withSSRAuth<P>(
   ): Promise<GetServerSidePropsResult<P>> => {
     const cookies = parseCookies(ctx);
 
-    const token = cookies[process.env.SECRET_TOKEN_SESSION_KEY];
+    const token = cookies[process.env.NEXT_PUBLIC_SECRET_TOKEN_SESSION_KEY];
 
-    if (!cookies[process.env.SECRET_TOKEN_SESSION_KEY]) {
+    if (!cookies[process.env.NEXT_PUBLIC_SECRET_TOKEN_SESSION_KEY]) {
       return {
         redirect: {
           destination: "/",
@@ -46,7 +46,7 @@ export function withSSRAuth<P>(
       if (!userhasValidPermissions) {
         return {
           redirect: {
-            destination: "/",
+            destination: "/dashboard",
             permanent: false,
           },
         };
@@ -57,8 +57,11 @@ export function withSSRAuth<P>(
       return await fn(ctx);
     } catch (error) {
       if (error instanceof AuthTokenError) {
-        destroyCookie(ctx, process.env.SECRET_TOKEN_SESSION_KEY);
-        destroyCookie(ctx, process.env.SECRET_REFRESH_TOKEN_SESSION_KEY);
+        destroyCookie(ctx, process.env.NEXT_PUBLIC_SECRET_TOKEN_SESSION_KEY);
+        destroyCookie(
+          ctx,
+          process.env.NEXT_PUBLIC_SECRET_REFRESH_TOKEN_SESSION_KEY
+        );
 
         return {
           redirect: {

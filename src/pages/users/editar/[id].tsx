@@ -9,7 +9,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { Input } from "../../components/form/Input";
+import { Input } from "../../../components/form/Input";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -17,11 +17,11 @@ import * as yup from "yup";
 
 import { useRouter } from "next/router";
 import { useMutation } from "react-query";
-import { Layout } from "../../components/Layout";
+import { Layout } from "../../../components/Layout";
 
-import { queryClient } from "../../services/queryClient";
-import { api } from "../../services/apiClient";
-import { withSSRAuth } from "../../utils/withSSRAuth";
+import { queryClient } from "../../../services/queryClient";
+import { api } from "../../../services/apiClient";
+import { withSSRAuth } from "../../../utils/withSSRAuth";
 type CreateUserFormData = {
   name: string;
   email: string;
@@ -80,16 +80,16 @@ export default function UserCreate() {
         flex="1"
         borderRadius={8}
         bg="gray.800"
-        p={["6", "8"]}
-        as="form"
-        onSubmit={handleSubmit(handleCreateUser)}
         _light={{
           bg: "white",
           shadow: "lg",
         }}
+        p={["6", "8"]}
+        as="form"
+        onSubmit={handleSubmit(handleCreateUser)}
       >
         <Heading size="lg" fontWeight="normal">
-          Criar usuário
+          Editar usuário
         </Heading>
         <Divider my="6" borderColor="gray.700" />
 
@@ -130,9 +130,7 @@ export default function UserCreate() {
         <Flex mt="8" justify="flex-end">
           <HStack spacing="4">
             <Link passHref href="/users">
-              <Button as="a" colorScheme="whiredpha">
-                Cancelar
-              </Button>
+              <Button as="a">Cancelar</Button>
             </Link>
             <Button
               colorScheme="blue"

@@ -14,6 +14,9 @@ export function NavSection({ title, children }: NavSectionProps) {
         color="gray.400"
         fontSize="small"
         textTransform="uppercase"
+        _light={{
+          color: "gray.800",
+        }}
       >
         {title}
       </Text>

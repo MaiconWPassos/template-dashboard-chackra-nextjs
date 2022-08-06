@@ -1,10 +1,15 @@
 import { Stack } from "@chakra-ui/react";
 import {
+  RiContactsBookLine,
   RiContactsLine,
   RiDashboardLine,
   RiGitMergeLine,
   RiInputMethodLine,
+  RiUser2Line,
+  RiUser3Line,
+  RiUserStarLine,
 } from "react-icons/ri";
+import { Can } from "../Can";
 import NavLink from "./NavLink";
 import { NavSection } from "./NavSection";
 
@@ -15,18 +20,20 @@ export function SidebarNav() {
         <NavLink icon={RiDashboardLine} href="/dashboard">
           Dashboard
         </NavLink>
-        <NavLink icon={RiContactsLine} href="/users">
-          Usuários
-        </NavLink>
       </NavSection>
-      <NavSection title="Automação">
-        <NavLink icon={RiInputMethodLine} href="/forms">
-          Formulários
-        </NavLink>
 
-        <NavLink icon={RiGitMergeLine} href="/automations">
-          Automação
-        </NavLink>
+      <NavSection title="Autenticação">
+        <Can permissions={["user.list"]}>
+          <NavLink icon={RiUser3Line} href="/users">
+            Usuários
+          </NavLink>
+        </Can>
+
+        <Can permissions={["role.list"]}>
+          <NavLink icon={RiUserStarLine} href="/roles">
+            Perfis
+          </NavLink>
+        </Can>
       </NavSection>
     </Stack>
   );

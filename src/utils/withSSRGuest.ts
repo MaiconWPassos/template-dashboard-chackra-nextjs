@@ -11,7 +11,7 @@ export function withSRRGuest<P>(fn: GetServerSideProps<P>) {
   ): Promise<GetServerSidePropsResult<P>> => {
     const cookies = parseCookies(ctx);
 
-    if (cookies[process.env.SECRET_TOKEN_SESSION_KEY]) {
+    if (cookies[process.env.NEXT_PUBLIC_SECRET_TOKEN_SESSION_KEY]) {
       return {
         redirect: {
           destination: "/dashboard",

@@ -9,12 +9,12 @@ import { useAuth } from "../contexts/AuthContext";
 import { withSRRGuest } from "../utils/withSSRGuest";
 
 type SignInFormData = {
-  email: string;
+  username: string;
   password: string;
 };
 
 const signInFormSchema = yup.object().shape({
-  email: yup.string().required("E-mail obrigatório").email("E-mail inválido"),
+  username: yup.string().required("Nome de usuário obrigatório"),
   password: yup.string().required("Senha é obrigatória"),
 });
 
@@ -40,13 +40,16 @@ export default function SignIn() {
         borderRadius={8}
         flexDir="column"
         onSubmit={handleSubmit(handleSignIn)}
+        _light={{
+          bg: "white",
+        }}
       >
         <Stack spacing="4">
           <Input
             error={formState.errors.email}
-            type="email"
-            label="E-mail"
-            {...register("email")}
+            type="text"
+            label="Usuário"
+            {...register("username")}
           />
           <Input
             name="password"
@@ -60,7 +63,7 @@ export default function SignIn() {
         <Button
           type="submit"
           mt="6"
-          colorScheme="teal"
+          colorScheme="blue"
           size="lg"
           isLoading={formState.isSubmitting}
         >
